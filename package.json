@@ -1,0 +1,11 @@
+{
+  "name": "MagicMirror-Module-Navigate",
+  "version": "1.0.0",
+  "description": "A module to connect a rotary encoder for MM Navigation",
+  "main": "MMM-Navigate.js",
+  "author": "AxLED",
+  "license": "MIT",
+  "dependencies": {
+    "onoff": "latest"
+  }
+}
