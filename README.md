@@ -2,6 +2,15 @@
 A module to connect a rotary encoder to MagicMirror and use it for Navigation inside of MagicMirror
 I wanted to use interaction to the MagicMirror and decided to use a rotary encoder, which has 3 functions: Clockwise, Counterclockwise and Press.
 These fucntions where combined to a navigation, so you have some possibilities, f.e.: Page increment/decrement, Newsfeed Article more/less details and actions for notification system.
+The navigation fades out, if not used.
+
+![Magic-Mirror Module MMM-Navigate screenshot1](https://raw.githubusercontent.com/Ax-LED/MMM-Navigate/master/MMM-Navigate_screenshot1.jpg)
+
+![Magic-Mirror Module MMM-Navigate screenshot2](https://raw.githubusercontent.com/Ax-LED/MMM-Navigate/master/MMM-Navigate_screenshot2.jpg)
+
+## Connect rotary encoder to raspberry pi
+![Magic-Mirror Module MMM-Navigate rotary encoder](https://raw.githubusercontent.com/Ax-LED/MMM-Navigate/master/MMM-Navigate_fritzing_rotaryencoder.jpg)
+
 ## Installing the module
 Clone this repository in your `~/MagicMirror/modules/` folder `( $ cd ~MagicMirror/modules/ )`:
 ````javascript
