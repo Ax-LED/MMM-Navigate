@@ -75,17 +75,17 @@ module.exports = NodeHelper.create({
 			if((seq_contacts.indexOf('A')!=-1 || seq_contacts.indexOf('B')!=-1) && (seq_contacts.indexOf('C')==-1)){
 				if(vdiff>30){
 					action = frichtung(seq_contacts+seq_value);
-					//console.log('Zeitdifferenz:',b.diff(last_time,'millisecond'));
-					//console.log('seq_contacts/value:', seq_contacts+seq_value);
-					//console.log('action: ',action);
+					console.log('Zeitdifferenz:',b.diff(last_time,'millisecond'));
+					console.log('seq_contacts/value:', seq_contacts+seq_value);
+					console.log('action: ',action);
 					sleep_ms(200);
 					//reset variables
 					last_time = '';
 					seq_contacts = '';
 					seq_value = '';
 				}else if(vdiff>40){
-					//console.log('Zeitdifferenz:',b.diff(last_time,'millisecond'));
-					//console.log('seq_contacts/value:', seq_contacts+seq_value);
+					console.log('Zeitdifferenz:',b.diff(last_time,'millisecond'));
+					console.log('seq_contacts/value:', seq_contacts+seq_value);
 					//reset variables
 					last_time = '';
 					seq_contacts = '';
@@ -94,16 +94,26 @@ module.exports = NodeHelper.create({
 
 			}else if(seq_contacts.indexOf('C')!=-1){//only react on C0 which is C-Button Press (not C-Button UP)
 				
-				//console.log('C');
+				if(vdiff>10){
+
 					action = frichtung('C0');
-					//console.log('Zeitdifferenz:',b.diff(last_time,'millisecond'));
-					//console.log('seq_contacts/value:', seq_contacts+seq_value);
-					//console.log('action: ',action);
+					console.log('Zeitdifferenz:',b.diff(last_time,'millisecond'));
+					console.log('seq_contacts/value:', seq_contacts+seq_value);
+					console.log('action: ',action);
 					sleep_ms(250);
 					//reset variables
 					last_time = '';
 					seq_contacts = '';
 					seq_value = '';
+
+				}else if(vdiff>40){
+					console.log('Zeitdifferenz:',b.diff(last_time,'millisecond'));
+					console.log('seq_contacts/value:', seq_contacts+seq_value);
+					//reset variables
+					last_time = '';
+					seq_contacts = '';
+					seq_value = '';
+				}
 			}
 
 			if(action=='CW'){
@@ -145,8 +155,11 @@ module.exports = NodeHelper.create({
 				case 'BA10':
 				case 'BAABA10001':
 				case 'BAA010':
+				case 'BAA110':
+				case 'BAA111':
 				case 'BAB011':
 				case 'BABA1001':
+				case 'BABA1110':
 				case 'BABAB00011':
 				case 'BABAB10011':
 				case 'BABAB10010':
@@ -164,6 +177,8 @@ module.exports = NodeHelper.create({
 				case 'ABA000':
 				case 'ABA011':
 				case 'ABB001':
+				case 'ABB110':
+				case 'ABB111':
 				case 'ABAA1000':
 				case 'ABABA10000':
 				case 'ABABB10001':
@@ -174,8 +189,10 @@ module.exports = NodeHelper.create({
 				case 'BB10':
 				case 'BAA000':
 				case 'BAB001':
+				case 'BAB110':
 				case 'BABABB000001':
 				case 'BABABA010001':
+				case 'BABB1110':
 				case 'BBAB1001':
 				case 'BBABA10001':
 				case 'BBABA10000':
