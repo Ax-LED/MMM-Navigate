@@ -2,10 +2,17 @@
   "name": "MagicMirror-Module-Navigate",
   "version": "1.0.0",
   "description": "A module to connect a rotary encoder for MM Navigation",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ax-LED/MMM-Navigate"
+  },
   "main": "MMM-Navigate.js",
   "author": "AxLED",
   "license": "MIT",
   "dependencies": {
     "onoff": "latest"
+  },
+  "devDependencies": {
+    "electron-rebuild": "^1.4.15"
   }
 }
