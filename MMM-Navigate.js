@@ -52,12 +52,14 @@ Module.register("MMM-Navigate",{
 			link.setAttribute('href', '');
 			link.setAttribute('target', 'iframe_a');
 			link.innerHTML = this.config.Alias[index];
-			naviItem.setAttribute('id', index)
+			naviItem.setAttribute('id', index);
             if(index==0){//first li gets class="selected"
                 naviItem.setAttribute('class', 'selected');
 			}
-			naviItem.append(link);
-			parent.append(naviItem);
+            //naviItem.append(link);
+            naviItem.appendChild(link);
+            //parent.append(naviItem);
+            parent.appendChild(naviItem);
 		}
 		return parent
     },
