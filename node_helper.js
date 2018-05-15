@@ -75,17 +75,17 @@ module.exports = NodeHelper.create({
 			if((seq_contacts.indexOf('A')!=-1 || seq_contacts.indexOf('B')!=-1) && (seq_contacts.indexOf('C')==-1)){
 				if(vdiff>30){
 					action = frichtung(seq_contacts+seq_value);
-					console.log('Zeitdifferenz:',b.diff(last_time,'millisecond'));
-					console.log('seq_contacts/value:', seq_contacts+seq_value);
-					console.log('action: ',action);
+					//console.log('Zeitdifferenz:',b.diff(last_time,'millisecond'));
+					//console.log('seq_contacts/value:', seq_contacts+seq_value);
+					//console.log('action: ',action);
 					sleep_ms(200);
 					//reset variables
 					last_time = '';
 					seq_contacts = '';
 					seq_value = '';
 				}else if(vdiff>40){
-					console.log('Zeitdifferenz:',b.diff(last_time,'millisecond'));
-					console.log('seq_contacts/value:', seq_contacts+seq_value);
+					//console.log('Zeitdifferenz:',b.diff(last_time,'millisecond'));
+					//console.log('seq_contacts/value:', seq_contacts+seq_value);
 					//reset variables
 					last_time = '';
 					seq_contacts = '';
@@ -97,9 +97,9 @@ module.exports = NodeHelper.create({
 				if(vdiff>10){
 
 					action = frichtung('C0');
-					console.log('Zeitdifferenz:',b.diff(last_time,'millisecond'));
-					console.log('seq_contacts/value:', seq_contacts+seq_value);
-					console.log('action: ',action);
+					//console.log('Zeitdifferenz:',b.diff(last_time,'millisecond'));
+					//console.log('seq_contacts/value:', seq_contacts+seq_value);
+					//console.log('action: ',action);
 					sleep_ms(250);
 					//reset variables
 					last_time = '';
@@ -107,8 +107,8 @@ module.exports = NodeHelper.create({
 					seq_value = '';
 
 				}else if(vdiff>40){
-					console.log('Zeitdifferenz:',b.diff(last_time,'millisecond'));
-					console.log('seq_contacts/value:', seq_contacts+seq_value);
+					//console.log('Zeitdifferenz:',b.diff(last_time,'millisecond'));
+					//console.log('seq_contacts/value:', seq_contacts+seq_value);
 					//reset variables
 					last_time = '';
 					seq_contacts = '';
