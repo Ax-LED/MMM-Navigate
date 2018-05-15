@@ -9,7 +9,11 @@
   "main": "MMM-Navigate.js",
   "author": "AxLED",
   "license": "MIT",
+  "scripts": {
+    "install": "electron-rebuild"
+},
   "dependencies": {
-    "onoff": "latest"
+    "onoff": "latest",
+    "electron-rebuild": "latest"
   }
 }
