@@ -19,28 +19,6 @@ cd MMM-Navigate
 npm install # this can take a while
 ````
 
-## Post installation steps
-1. Find out, which version of electron is installed
-- `cd ~MagicMirror`
-- `npm list | grep electron`
-
-you will see output like this
-````javascript
-├─┬ electron@1.4.15
-│ ├─┬ electron-download@3.3.0
-│ ├─┬ electron-chromedriver@1.7.1
-│ │ └─┬ electron-download@4.1.0
-│ │ │ └─┬ electron-to-chromium@1.3.30
-│ │ │   └── electron-releases@2.1.0
-````
-
-2. Whats next?
-- change in your MMM-Navigate folder (`cd ~/MagicMirror/modules/MMM-Navigate`)
-- and then type in following command, you must change the version number 1.4.15 in my example) with your own:
-- `npm rebuild --runtime=electron --target=1.4.15 --disturl=https://atom.io/download/atom-shell --abi=50`
-
-Now it should work.
-
 ## Using the module
 
 To use this module, add it to the modules array in the `config/config.js` file:
