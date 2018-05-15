@@ -1,24 +1,14 @@
 {
-  "name": "mmm-navigate",
+  "name": "MagicMirror-Module-Navigate",
   "version": "1.0.0",
-  "description": "A module to connect a rotary encoder to MagicMirror and use it for Navigation inside of MagicMirror ",
-  "main": "MMM-Navigate.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "description": "A module to connect a rotary encoder for MM Navigation",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ax-led/MMM-Navigate.git"
+    "url": "git+https://github.com/Ax-LED/MMM-Navigate"
   },
-  "author": "Ax-LED",
+  "main": "MMM-Navigate.js",
+  "author": "AxLED",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/ax-led/MMM-Navigate/issues"
-  },
-  "homepage": "https://github.com/ax-led/MMM-Navigate#readme",
-  "scripts": {
-    "postinstall": "node_modules/.bin/electron-rebuild -e ../../node_modules/electron"
-},
   "dependencies": {
     "onoff": "latest"
   }
