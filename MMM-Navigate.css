@@ -9,6 +9,11 @@ body {
     li.selected {
     background: grey;
     }
+    li.locked {
+        border: 2px;
+        border-color: red;
+        border-style: solid;
+        }
     a:link {
         text-decoration: none;
         color: white;
