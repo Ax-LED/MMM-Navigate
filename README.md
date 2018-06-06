@@ -25,16 +25,6 @@ npm install # this can take a while
 To use this module, add it to the modules array in the `config/config.js` file:
 ````javascript
 {
-			module: "MMM-Navigate",
-			header: "Navigation",
-			position: "top_left",
-			config: {
-					Alias: [ 'Seite vorwärts','Seite zurück', 'News - mehr Details' , 'News - weniger Details','Herunterfahren'],
-					Action: [{notification:'PAGE_INCREMENT',payload:''},{notification:'PAGE_DECREMENT',payload:''},{notification:'ARTICLE_MORE_DETAILS',payload:''},{notification:'ARTICLE_LESS_DETAILS',payload:''},{notification: "REMOTE_ACTION", payload: {action: "SHUTDOWN"}}],
-					GPIOPins: [26,20,19]//rotary cw, rotary ccw, rotary press (BCM Numbering)
-					},
-		},
-{
 	module: "MMM-Navigate",
 	header: "Navigation",
 	position: "top_left",
@@ -91,24 +81,24 @@ The following properties can be configured:
 			<td>Array for Definition of GPIO-Pins (BMC) to connect the rotary encoder for the following actions: Clockwise, Counterclockwise and Press</td>
 		</tr>
    </table>
-   Further information: In version 1.1 of the module, i added a 'second click confirmation notification' for the following <code>REMOTE_ACTIONs</code>.
-   - SHUTDOWN
-   - RESTART
-   - REBOOT
+   Further information:<br>In version 1.1 of the module, i added a 'second click confirmation notification' for the following <code>REMOTE_ACTIONs</code>.<br>
+   - SHUTDOWN<br>
+   - RESTART<br>
+   - REBOOT<br>
    This means, if you select one of these entries and press the rotary, you get a notification to do a second press to execute the selected entry.
 
    ## Further options
    You can communication with this module also by sending notifications.
    Examples:
-   <code>yourmmip:8080/remote?action=NOTIFICATION&notification=CCW"</code> emulates turning rotary counterclockwise
-   <code>yourmmip:8080/remote?action=NOTIFICATION&notification=CCW"</code> emulates turning rotary counterclockwise
-   <code>yourmmip:8080/remote?action=NOTIFICATION&notification=PRESSED"</code> emulates pressing rotary encoder
+   <code>yourmmip:8080/remote?action=NOTIFICATION&notification=CCW</code> emulates turning rotary counterclockwise
+   <code>yourmmip:8080/remote?action=NOTIFICATION&notification=CW</code> emulates turning rotary clockwise
+   <code>yourmmip:8080/remote?action=NOTIFICATION&notification=PRESSED</code> emulates pressing rotary encoder
 
    ## Version
    1.1
    Changelog:
    - added ability to send notifications to MMM-Navigate by other modules
-   - added locked mode, so you can put two actions in 1 navigation link which belong together (like PAGE_INCREMENT and PAGE_DECREMENT). More details see Configuration options (Action).
+   - added locked mode, so you can put two(2) actions in one(1) navigation link which belong together (like PAGE_INCREMENT and PAGE_DECREMENT). More details see Configuration options (Action).
    - modified css, so locked mode is visual (red frame when locked) in MM
    - added second click confirmation notification' for the following REMOTE_ACTIONs (SHUTDOWN, RESTART, REBOOT)
    
