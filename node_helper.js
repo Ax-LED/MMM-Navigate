@@ -9,7 +9,7 @@
  //tail -f ~/.pm2/logs/mm-out-0.log
  //tail -f ~/.pm2/logs/mm-error-0.log 
 
-const Gpio = require('onoff').Gpio
+const Gpio = require('onoff').Gpio;
 const moment = require('moment');//needed for time
 var NodeHelper = require("node_helper");
 //Variables
@@ -36,39 +36,39 @@ module.exports = NodeHelper.create({
 		var self = this;
 
 		console.log('MMM-Navigate, listen on GPIO PINs (BCM): '+self.config.GPIOPins[0]+','+self.config.GPIOPins[1]+','+self.config.GPIOPins[2]);
-		const A = new Gpio(self.config.GPIOPins[0], 'in', 'both',{debounceTimeout : 50 }) //BCM Pin 26
-		const B = new Gpio(self.config.GPIOPins[1], 'in', 'both',{debounceTimeout : 50 }) //BCM Pin 20
-		const C = new Gpio(self.config.GPIOPins[2], 'in', 'both',{debounceTimeout : 20 }) //BCM Pin 19
+		const A = new Gpio(self.config.GPIOPins[0], 'in', 'both',{debounceTimeout : 50 }); //BCM Pin 26
+		const B = new Gpio(self.config.GPIOPins[1], 'in', 'both',{debounceTimeout : 50 }); //BCM Pin 20
+		const C = new Gpio(self.config.GPIOPins[2], 'in', 'both',{debounceTimeout : 20 }); //BCM Pin 19
 
 		A.watch(function (err, value) {
 			if (err) {
-			  throw err
+			  throw err;
 			}
 			//console.log('A triggered: ' + value)
 			value_a = value;
 			if(value_b != ''){
 				helfer = f3('B');
 			  }
-		  })
+		  });
 		  
 		  B.watch(function (err, value) {
 			if (err) {
-			  throw err
+			  throw err;
 			}
 			//console.log('B triggered: ' + value)
 			value_b = value;
 			if(value_a != ''){
 				helfer = f3('A');
 			  }
-		  })
+		  });
 
 		  C.watch(function (err, value) {
 			if (err) {
-			  throw err
+			  throw err;
 			}
 			//console.log('C triggered: ' + value)
 			helfer = f2('C',value);
-		  })
+		  });
 
 		  function f2(contact, value){
 			seq_contacts = seq_contacts + contact;
