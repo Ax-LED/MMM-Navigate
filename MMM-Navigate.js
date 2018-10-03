@@ -1,7 +1,7 @@
 //MMM-Navigate.js:
 
 var locked = false;
-var confirm = 0;
+var vconfirm = 0;
 
 Module.register("MMM-Navigate",{
 	// Default module config.
@@ -14,17 +14,17 @@ Module.register("MMM-Navigate",{
     getStyles: function() {
         return [
                 this.file('MMM-Navigate.css'), //load css
-            ]
-        },
+            ];
+    },
 
     sendAction: function(description) {
         this.show(0,{force: true});
 
-        if((description.payload.action == "SHUTDOWN" || description.payload.action == "RESTART" || description.payload.action == "REBOOT") && (confirm==0)){
-            confirm = 1;
+        if((description.payload.action == "SHUTDOWN" || description.payload.action == "RESTART" || description.payload.action == "REBOOT") && (vconfirm==0)){
+            vconfirm = 1;
             this.sendNotification("SHOW_ALERT",{type:"notification",message:"Ausführen von "+ description.payload.action +" bitte durch 2.Klick bestätigen"});
         }else{
-            confirm = 0;
+            vconfirm = 0;
             this.sendNotification(description.notification, description.payload);
         }
 
@@ -35,27 +35,6 @@ Module.register("MMM-Navigate",{
     start: function() {
         Log.info("Starting module: " + this.name);
         this.sendConfig();//pass config to node_helper.js
-        //Helper to test connection to node_helper.js
-        //this.sendSocketNotification('START', {message: 'Starte Verbindung node_helper für ' + this.name});
-    },
-
-    //Helper, to use module without Rotary Encoder and without GPIO Pins, like developing in Pixel VM
-    notificationReceived: function(notification, payload) {
-        /*if (notification === "HIDE_RADIO") {
-         this.hide(1000);
-            this.updateDom(300);
-        }*/
-        if(notification === "CW"){
-            //this.sendSocketNotification('CW',{inputtype: 'CW'});
-            this.naviaction({inputtype: 'CW'});
-            //console.log('ADR: notification received')
-        }
-        if(notification === "CCW"){
-            this.naviaction({inputtype: 'CCW'});
-        }
-        if(notification === "PRESSED"){
-            this.naviaction({inputtype: 'PRESSED'});
-        }
     },
 
 	// Override dom generator.
@@ -66,7 +45,7 @@ Module.register("MMM-Navigate",{
 			  loading.innerHTML = this.translate("LOADING");
 			  loading.className = "dimmed light small";
 			  wrapper.appendChild(loading);
-			return wrapper
+			return wrapper;
 		}
 
         var self = this;//makes variables usable in functions
@@ -74,15 +53,12 @@ Module.register("MMM-Navigate",{
 		//Div after loading
 		var parent = document.createElement("div");
         parent.className = "xsmall bright";
-        parent.setAttribute('tabindex', 0);//set tabindex on div for focus purposes
 
 		//build navigation from array
         for (let index = 0; index < this.config.Action.length; index++) {
 			var naviItem = document.createElement("li");
 			var link = document.createElement('a');
 			link.setAttribute('href', '');
-			link.setAttribute('target', 'iframe_a');
-            //link.innerHTML = this.config.Alias[index] + '\u{1F512}'+'&#128274;';
             link.innerHTML = this.config.Alias[index];
 			naviItem.setAttribute('id', index);
             if(index==0){//first li gets class="selected"
@@ -91,7 +67,7 @@ Module.register("MMM-Navigate",{
             naviItem.appendChild(link);
             parent.appendChild(naviItem);
 		}
-		return parent
+		return parent;
     },
 
     sendConfig: function() {
@@ -102,95 +78,82 @@ Module.register("MMM-Navigate",{
 
     naviaction: function(payload){
         var self = this;
-        var selectedid = '';
-        var test = '';
         
-        if(payload.inputtype === 'CW'){
-            confirm = 0;
-            self.show(0);
-            selectedid = fselectedid();
-
-            if(locked==false){//Menu not locked so change selection by CW and CCW
-                if(selectedid==''){//first li gets class="selected"
-                    document.getElementsByTagName('li')[0].setAttribute('class', 'selected');
-                }else if(selectedid==self.config.Action.length-1){//last entry reached, set mark on first entry
-                    document.getElementsByTagName('li')[selectedid].setAttribute('class', '');
-                    document.getElementsByTagName('li')[0].setAttribute('class', 'selected');
-                }else{//delete mark of selected id and mark next one
-                    document.getElementsByTagName('li')[selectedid].setAttribute('class', '');
-                    document.getElementsByTagName('li')[parseInt(selectedid)+1].setAttribute('class', 'selected');
-                }
-            }else{//Menu locked so execute first or second payload of array (depending on CW or CCW)
-                self.sendAction(self.config.Action[selectedid][0]);
-            }
-        }else if(payload.inputtype === 'CCW'){
-            confirm = 0;
-            self.show(0);
-            selectedid = fselectedid();
-
-            if(locked==false){//Menu not locked so change selection by CW and CCW
-                if(selectedid==''){
-                    document.getElementsByTagName('li')[self.config.Action.length-1].setAttribute('class', 'selected');
-                }else if(selectedid==0){//first entry reached, set mark on last entry
-                    document.getElementsByTagName('li')[selectedid].setAttribute('class', '');
-                    document.getElementsByTagName('li')[self.config.Action.length-1].setAttribute('class', 'selected');
-                }else{//delete mark of selected id and mark previous one
-                    document.getElementsByTagName('li')[selectedid].setAttribute('class', '');
-                    document.getElementsByTagName('li')[parseInt(selectedid)-1].setAttribute('class', 'selected');
-                }
-            }else{//Menu locked so execute first or second payload of array (depending on CW or CCW)
-                self.sendAction(self.config.Action[selectedid][1]);
-            }
-        }else if(payload.inputtype === 'PRESSED'){
-            self.show(0);
-            selectedid = fselectedid();
-
-            if(locked==false){//Menu not locked so ... (see below)
-                if(Array.isArray(self.config.Action[selectedid])){//if selected entry Action is array - lock it
-                    locked = true;
-                    document.getElementsByTagName('li')[selectedid].setAttribute('class', 'selected locked');
-                    //console.log('Alex: locked setzen.');
-                }else{//if selected entry Action is object - so there is nothing to lock - execute it
-                    self.show(0,{force: true});           
-                    //console.log('Alex, Payload: ', self.config.Action[selectedid].notification,' xxx ',self.config.Action[selectedid].payload);
-                    self.sendAction(self.config.Action[selectedid]);
-                }
-            }else{//Menu locked so unlock it
-                locked = false;
-                document.getElementsByTagName('li')[selectedid].setAttribute('class', 'selected');
-                //console.log('Alex: locked auf false setzen setzen. Selectedid: ',selectedid);
-            }
+        if(payload.inputtype === 'CW' || payload.inputtype === 'CCW' || payload.inputtype === 'PRESSED'){
+            navigationmove(payload.inputtype);
         }
-            
+        
         function fselectedid(){//get ID and return it
             for (let index = 0; index < self.config.Action.length; index++) {
                 var test = document.getElementsByTagName('li')[index].getAttribute('class');
 
-                if(test=='selected' || test=='selected locked'){
+                if(test=='selected' || test=='selected locked' || test=='selected locked fa-lock1'){//axled lock icon
                     var selectedid = document.getElementsByTagName('li')[index].getAttribute('id');
+                    return selectedid;
                 }
             }
-            return selectedid;
         }
-        return parent
+
+        function navigationmove(input){
+            self.show(0);
+            selectedid = fselectedid();
+            if(input==='CW' || input==='CCW'){
+                vconfirm = 0;
+
+                if(input==='CW'){
+                    navistep = 1;
+                    actionstep = 0;
+                }else if(input==='CCW'){
+                    navistep = -1;
+                    actionstep = 1;
+                }
+
+                if(locked==true){
+                    self.sendAction(self.config.Action[selectedid][parseInt(actionstep)]);
+                }else if(locked==false){
+                                        
+                    document.getElementsByTagName('li')[selectedid].setAttribute('class', '');//CW&CCW
+
+                    if(selectedid==0 && input==='CW'){//mark next row
+                        document.getElementsByTagName('li')[parseInt(selectedid)+1].setAttribute('class', 'selected');//CW
+                    }else if(selectedid==0 && input==='CCW'){//mark last row
+                        document.getElementsByTagName('li')[self.config.Action.length-1].setAttribute('class', 'selected');//CCW
+                    }else if(selectedid==self.config.Action.length-1 && input==='CW'){//mark first row
+                        document.getElementsByTagName('li')[0].setAttribute('class', 'selected');//CW
+                    }else if(selectedid==self.config.Action.length-1 && input==='CCW'){//mark prev row
+                        document.getElementsByTagName('li')[parseInt(selectedid)-1].setAttribute('class', 'selected');//CCW
+                    }else{//mark next one in selected direction
+                        document.getElementsByTagName('li')[parseInt(selectedid)+navistep].setAttribute('class', 'selected');
+                    }
+                }
+            }else if(input === 'PRESSED'){
+                if(locked==false){//Menu not locked so ... (see below)
+                    if(Array.isArray(self.config.Action[selectedid])){//if selected entry Action is array - lock it
+                        locked = true;
+                        document.getElementsByTagName('li')[selectedid].setAttribute('class', 'selected locked fa-lock1');//axled lock icon
+                    }else{//if selected entry Action is object - so there is nothing to lock - execute it
+                        self.show(0,{force: true});           
+                        self.sendAction(self.config.Action[selectedid]);
+                    }
+                }else{//Menu locked so unlock it
+                    locked = false;
+                    document.getElementsByTagName('li')[selectedid].setAttribute('class', 'selected');
+                }
+            }
+        }
+        return parent;
+    },
+
+    //Helper, to use module without Rotary Encoder and without GPIO Pins, like developing in Pixel VM
+    notificationReceived: function(notification, payload) {
+        if(notification === "CW" || notification === "CCW" || notification === "PRESSED"){
+            this.naviaction({inputtype: ""+ notification +""});
+        }
     },
 
     // socketNotificationReceived from helper
 	socketNotificationReceived: function (notification, payload) {
-		if(notification === "{{MODULE_NAME}}-NOTIFICATION_TEST") {
-			// set dataNotification
-			this.dataNotification = payload;
-			this.updateDom();
-        }else if(notification === 'MSG'){
-            //Log.info('MSG Testnofication von node_helper für MMM-Navigate erhalten, Payload: '+payload.message);
-        }else if(notification === 'CW'){
-            //console.log('Rotary Info CW erhalten');
-            this.naviaction(payload);
-        }else if(notification === 'CCW'){
-            //console.log('Rotary Info CCW erhalten');
-            this.naviaction(payload);
-        }else if(notification === 'PRESSED'){
-            //console.log('Rotary Info PRESSED erhalten');
+	    if(notification === 'CW' || notification === 'CCW' || notification === 'PRESSED'){
             this.naviaction(payload);
         }
     },

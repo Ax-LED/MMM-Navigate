@@ -1,26 +1,44 @@
 body {
         background-color: black;
     }
+
     li {
         list-style-type: none;
         padding: 0;
         margin: 0;
     }
+
     li.selected {
-    background: grey;
+        background: grey;
     }
+
+
     li.locked {
         border: 2px;
         border-color: red;
         border-style: solid;
         }
+    
+    .fa-lock1:after {
+            content: "\f023";
+            margin-left: 5px;
+            /*display: inline-block;*/
+            font: normal normal normal 14px/1 FontAwesome;
+            font-size: inherit;
+            text-rendering: auto;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+          }
+
     a:link {
         text-decoration: none;
         color: white;
     }
+
     a:visited {
         color: white;
     }
+
     a:hover {
         color: white
     }
