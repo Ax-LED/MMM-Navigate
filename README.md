@@ -95,6 +95,10 @@ The following properties can be configured:
    <code>yourmmip:8080/remote?action=NOTIFICATION&notification=PRESSED</code> emulates pressing rotary encoder
 
    ## Version
+   1.2 Changelog:
+   - added lock icon next to navigation alias, if locked
+   - code cleaned
+   
    1.1
    Changelog:
    - added ability to send notifications to MMM-Navigate by other modules
