@@ -9,7 +9,7 @@ The navigation fades out, if not used.
 ![Magic-Mirror Module MMM-Navigate screenshot2](https://raw.githubusercontent.com/Ax-LED/MMM-Navigate/master/MMM-Navigate_screenshot2.jpg)
 
 ## Connect rotary encoder to raspberry pi
-Using capacitors for CLK, DT and SW Pin can be usefull for debouncing.
+Using capacitors for CLK, DT and SW Pin can be useful for debouncing.
 ![Magic-Mirror Module MMM-Navigate rotary encoder](https://raw.githubusercontent.com/Ax-LED/MMM-Navigate/master/MMM-Navigate_fritzing_rotaryencoder.jpg)
 
 ## Installing the module
@@ -88,7 +88,7 @@ The following properties can be configured:
    This means, if you select one of these entries and press the rotary, you get a notification to do a second press to execute the selected entry.
 
    ## Further options
-   You can communication with this module also by sending notifications.
+   You can communicate with this module by sending notifications.
    Examples:
    <code>yourmmip:8080/remote?action=NOTIFICATION&notification=CCW</code> emulates turning rotary counterclockwise
    <code>yourmmip:8080/remote?action=NOTIFICATION&notification=CW</code> emulates turning rotary clockwise
