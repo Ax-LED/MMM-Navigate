@@ -20,9 +20,12 @@ Module.register("MMM-Navigate",{
     sendAction: function(description) {
         this.show(0,{force: true});
 
-        if((description.payload.action == "SHUTDOWN" || description.payload.action == "RESTART" || description.payload.action == "REBOOT") && (vconfirm==0)){
+        if((description.notification == "SHELLCOMMAND") && (vconfirm==0)){
             vconfirm = 1;
-            this.sendNotification("SHOW_ALERT",{type:"notification",message:"Ausführen von "+ description.payload.action +" bitte durch 2.Klick bestätigen"});
+            this.sendNotification("SHOW_ALERT",{type:"notification",message:"Ausführen von SHELLCOMMAND "+ description.payload +" bitte durch 2.Klick bestätigen"});
+        }else if((description.notification == "SHELLCOMMAND") && (vconfirm==1)){
+            vconfirm = 0;
+            this.sendSocketNotification(description.notification, description.payload);
         }else{
             vconfirm = 0;
             this.sendNotification(description.notification, description.payload);
@@ -149,6 +152,10 @@ Module.register("MMM-Navigate",{
         if(notification === "CW" || notification === "CCW" || notification === "PRESSED"){
             this.naviaction({inputtype: ""+ notification +""});
         }
+
+        if(notification === "SHELLCOMMAND"){
+             this.sendSocketNotification(notification, payload);
+        }
     },
 
     // socketNotificationReceived from helper
@@ -157,5 +164,4 @@ Module.register("MMM-Navigate",{
             this.naviaction(payload);
         }
     },
-    
 });

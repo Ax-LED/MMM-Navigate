@@ -12,6 +12,9 @@
 const Gpio = require('onoff').Gpio;
 const moment = require('moment');//needed for time
 var NodeHelper = require("node_helper");
+const exec = require("child_process").exec;
+const url = require("url");
+const express = require("express");
 //Variables
 action = '';
 helfer = '';
@@ -23,6 +26,7 @@ module.exports = NodeHelper.create({
   start: function() {
 		var self = this;
 		this.loaded = false;
+		this.createRoutes();
 	},
 	
 	intializeButtons: function() {
@@ -91,14 +95,26 @@ module.exports = NodeHelper.create({
 
 	// Override socketNotificationReceived method.
 	socketNotificationReceived: function(notification, payload) {
-		if (notification === 'START') {
-			console.log("Working notification system. Notification:", notification, "payload: ", payload);
-			// Send notification
-			this.sendSocketNotification('MSG', {message: 'test'});
-		}else if (notification === 'BUTTON_CONFIG') {     
+		if (notification === 'BUTTON_CONFIG') {     
 			this.config = payload.config;
 			this.intializeButtons();
 		}
+
+		if (notification === 'SHELLCOMMAND') {
+			console.log("MMM-Navigate, received Shellcommand:", payload);
+			exec(payload, null);
+		}
 	},
-	
+
+	createRoutes: function() {
+		var self = this;
+
+		this.expressApp.get("/MMM-Navigate/remote", function(req, res) {
+				var query = url.parse(req.url, true).query;
+				if(query.notification=='CW' || query.notification=='CCW' || query.notification=='PRESSED'){
+					self.sendSocketNotification(query.notification,{inputtype: ""+query.notification+""});
+				}
+				res.send("MMM-Navigate, data received: "+ JSON.stringify(query));
+		});
+	},
 });
