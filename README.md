@@ -92,10 +92,10 @@ The following properties can be configured:
 
    ## Further options
    You can communication with this module also by sending notifications.
-   Examples:
-   <code>yourmmip:8080/MMM-Navigate/remote?action=NOTIFICATION&notification=CCW</code> emulates turning rotary counterclockwise
-   <code>yourmmip:8080/MMM-Navigate/remote?action=NOTIFICATION&notification=CW</code> emulates turning rotary clockwise
-   <code>yourmmip:8080/MMM-Navigate/remote?action=NOTIFICATION&notification=PRESSED</code> emulates pressing rotary encoder
+   Examples:<br>
+   <code>yourmmip:8080/MMM-Navigate/remote?action=NOTIFICATION&notification=CCW</code> emulates turning rotary counterclockwise<br>
+   <code>yourmmip:8080/MMM-Navigate/remote?action=NOTIFICATION&notification=CW</code> emulates turning rotary clockwise<br>
+   <code>yourmmip:8080/MMM-Navigate/remote?action=NOTIFICATION&notification=PRESSED</code> emulates pressing rotary encoder<br>
    <code>yourmmip:8080/MMM-Navigate/remote?notification=SHELLCOMMAND&action=sudo%20shutdown%20-h%20now</code> send command to shutdown your pi
 
    ## Version
