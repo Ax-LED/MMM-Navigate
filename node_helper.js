@@ -10,16 +10,12 @@
  //tail -f ~/.pm2/logs/mm-error-0.log 
 
 const Gpio = require('onoff').Gpio;
-const moment = require('moment');//needed for time
 var NodeHelper = require("node_helper");
 const exec = require("child_process").exec;
 const url = require("url");
-const express = require("express");
+
 //Variables
-action = '';
-helfer = '';
-value_a = '';
-value_b = '';
+var lastStateCLK = 0;
 
 module.exports = NodeHelper.create({
 	// Subclass start method.
@@ -29,75 +25,90 @@ module.exports = NodeHelper.create({
 		this.createRoutes();
 	},
 	
-	intializeButtons: function() {
-		//Rotary Code...
+	intializeRotary: function() {
+
+		//Rotary Code..
+		this.loaded = true;
 		var self = this;
 
 		console.log('MMM-Navigate, listen on GPIO PINs (BCM): '+self.config.GPIOPins[0]+','+self.config.GPIOPins[1]+','+self.config.GPIOPins[2]);
-		const A = new Gpio(self.config.GPIOPins[0], 'in', 'both',{debounceTimeout : 50 }); //BCM Pin 26
-		const B = new Gpio(self.config.GPIOPins[1], 'in', 'both',{debounceTimeout : 50 }); //BCM Pin 20
-		const C = new Gpio(self.config.GPIOPins[2], 'in', 'both',{debounceTimeout : 20 }); //BCM Pin 19
+		const CLK = new Gpio(self.config.GPIOPins[1], 'in', 'both',{debounceTimeout : 0 }); //BCM Pin 20
+		const DT = new Gpio(self.config.GPIOPins[0], 'in', 'both',{debounceTimeout : 0 }); //BCM Pin 26
+		const SW = new Gpio(self.config.GPIOPins[2], 'in', 'both',{debounceTimeout : 20 }); //BCM Pin 19
 
-		A.watch(function (err, value) {
+		CLK.read(function (err, value) {
 			if (err) {
 			  throw err;
 			}
-			value_a = value;
-			if(value_b != ''){
-				helfer = f3('B');
-			  }
-		  });
-		  
-		B.watch(function (err, value) {
+			this.lastStateCLK = value;
+			this.a = value;
+		});
+
+		DT.read(function (err, value) {
 			if (err) {
 			  throw err;
 			}
-			value_b = value;
-			if(value_a != ''){
-				helfer = f3('A');
-			  }
-		  });
-
-		C.watch(function (err, value) {
+			this.b = value;
+		});
+		
+		CLK.watch(function (err, value) {
+			if (err) {
+			  throw err;
+			}
+			this.a = value;
+		});
+		
+		DT.watch(function (err, value) {
+			if (err) {
+				throw err;
+			}
+			this.b  = value;
+			tick();
+		});
+		
+		SW.watch(function (err, value) {
 			if (err) {
 			  throw err;
 			}
 			if(value == 0){
-				helfer = f3('C');
+				self.sendSocketNotification('PRESSED',{inputtype: 'PRESSED'});
 			}
 		  });
 
-		function f3(contact){
-			if(contact == 'A'){
-				action = 'CW';
-			}else if(contact == 'B'){
-				action = 'CCW';
-			}else if(contact == 'C'){
-				action = 'PRESSED';
+		function tick() {
+			const { a, b } = this;
+
+			if (a != lastStateCLK && a == 1){//only do action, if rotary was moved and only count one step
+				if (b != a){
+					self.sendSocketNotification('CW',{inputtype: 'CW'});
+					lastdir = 'CW';
+				} else {
+					self.sendSocketNotification('CCW',{inputtype: 'CCW'});
+					lastdir = 'CCW';
+				}
+			} 
+
+			//catch missing count when changing from CCW to CW
+			if (a == lastStateCLK && b == 0 && lastdir == 'CCW') {
+				self.sendSocketNotification('CW',{inputtype: 'CW'});	
+				lastdir = 'CW';
 			}
 
-			//reset variables
-			contact = '';
-			value_a = ''; 
-			value_b = '';
+			lastStateCLK = a;
+			return this;
+		}
 
-			if(action=='CW' || action=='CCW' || action=='PRESSED'){
-				self.sendSocketNotification(action,{inputtype: ""+action+""});
-			}
-		}
-		  
-		// Milliseconds
-		function sleep_ms(millisecs) {
-			var initiation = new Date().getTime();
-			while ((new Date().getTime() - initiation) < millisecs);
-		}
 	},
 
 	// Override socketNotificationReceived method.
 	socketNotificationReceived: function(notification, payload) {
 		if (notification === 'BUTTON_CONFIG') {     
 			this.config = payload.config;
-			this.intializeButtons();
+
+			if (this.loaded === false) {//AxLED 2020-04
+				this.intializeRotary();
+			}
+			
 		}
 
 		if (notification === 'SHELLCOMMAND') {
