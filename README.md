@@ -107,6 +107,9 @@ The following properties can be configured:
    <code>yourmmip:8080/MMM-Navigate/remote?notification=SHELLCOMMAND&action=sudo%20shutdown%20-h%20now</code> send command to shutdown your pi
 
    ## Version
+   1.5 Changelog:
+   - minor bugfixes
+   
    1.4 Changelog:
    - changed code for better recognition of the rotary encoder
    - changed code enables faster movement of the rotary
