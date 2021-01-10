@@ -53,6 +53,14 @@ To use this module, add it to the modules array in the `config/config.js` file:
 			},
 },
 ````
+On some Raspberry Pis it is neccesary to put the following line to /boot/config.txt for the GPIO where "rotary press (SW)" is connected:
+````
+gpio=19=ip,pu
+````
+<b>Background:</b> Sets your GPIO 19 as input (ip) and pull up (pu)
+Change the entry according to the GPIO pin you use.
+
+
 ## Configuration options
 
 The following properties can be configured:
