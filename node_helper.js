@@ -16,6 +16,7 @@ const url = require("url");
 
 //Variables
 var lastStateCLK = 0;
+var lastdir = '';
 
 module.exports = NodeHelper.create({
 	// Subclass start method.
