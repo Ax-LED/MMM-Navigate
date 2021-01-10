@@ -1,6 +1,6 @@
 {
   "name": "MagicMirror-Module-Navigate",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "A module to connect a rotary encoder for MM Navigation",
   "repository": {
     "type": "git",
