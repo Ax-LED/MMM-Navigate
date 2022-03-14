@@ -1,6 +1,7 @@
 //MMM-Navigate.js:
 
 var locked = false;
+var selected = 0;
 var vconfirm = 0;
 
 Module.register("MMM-Navigate",{
@@ -63,9 +64,10 @@ Module.register("MMM-Navigate",{
 			var link = document.createElement('a');
 			link.setAttribute('href', '');
             link.innerHTML = this.config.Alias[index];
-			naviItem.setAttribute('id', index);
+			naviItem.setAttribute('id', `naviItem-${index}`);
+			naviItem.classList.add('naviItem');
             if(index==0){//first li gets class="selected"
-                naviItem.setAttribute('class', 'selected');
+                naviItem.classList.add('selected');
 			}
             naviItem.appendChild(link);
             parent.appendChild(naviItem);
@@ -85,21 +87,10 @@ Module.register("MMM-Navigate",{
         if(payload.inputtype === 'CW' || payload.inputtype === 'CCW' || payload.inputtype === 'PRESSED'){
             navigationmove(payload.inputtype);
         }
-        
-        function fselectedid(){//get ID and return it
-            for (let index = 0; index < self.config.Action.length; index++) {
-                var test = document.getElementsByTagName('li')[index].getAttribute('class');
-
-                if(test=='selected' || test=='selected locked' || test=='selected locked fa-lock1'){//axled lock icon
-                    var selectedid = document.getElementsByTagName('li')[index].getAttribute('id');
-                    return selectedid;
-                }
-            }
-        }
 
         function navigationmove(input){
             self.show(0);
-            selectedid = fselectedid();
+            const oldSelectedid = selected;
             if(input==='CW' || input==='CCW'){
                 vconfirm = 0;
 
@@ -110,37 +101,32 @@ Module.register("MMM-Navigate",{
                     navistep = -1;
                     actionstep = 1;
                 }
+                
 
                 if(locked==true){
-                    self.sendAction(self.config.Action[selectedid][parseInt(actionstep)]);
+                    self.sendAction(self.config.Action[selected][parseInt(actionstep)]);
                 }else if(locked==false){
-                                        
-                    document.getElementsByTagName('li')[selectedid].setAttribute('class', '');//CW&CCW
-
-                    if(selectedid==0 && input==='CW'){//mark next row
-                        document.getElementsByTagName('li')[parseInt(selectedid)+1].setAttribute('class', 'selected');//CW
-                    }else if(selectedid==0 && input==='CCW'){//mark last row
-                        document.getElementsByTagName('li')[self.config.Action.length-1].setAttribute('class', 'selected');//CCW
-                    }else if(selectedid==self.config.Action.length-1 && input==='CW'){//mark first row
-                        document.getElementsByTagName('li')[0].setAttribute('class', 'selected');//CW
-                    }else if(selectedid==self.config.Action.length-1 && input==='CCW'){//mark prev row
-                        document.getElementsByTagName('li')[parseInt(selectedid)-1].setAttribute('class', 'selected');//CCW
-                    }else{//mark next one in selected direction
-                        document.getElementsByTagName('li')[parseInt(selectedid)+navistep].setAttribute('class', 'selected');
-                    }
+                    selected += navistep;
+                    if (selected < 0)
+                    	selected = self.config.Action.length-1;
+                    if (selected > self.config.Action.length-1)
+                    	selected = 0;
+                    const naviElements = document.querySelectorAll('li.naviItem');                   
+                    naviElements[oldSelectedid].classList.remove('selected');
+                    naviElements[selected].classList.add('selected');
                 }
             }else if(input === 'PRESSED'){
                 if(locked==false){//Menu not locked so ... (see below)
-                    if(Array.isArray(self.config.Action[selectedid])){//if selected entry Action is array - lock it
+                    if(Array.isArray(self.config.Action[selected])){//if selected entry Action is array - lock it
                         locked = true;
-                        document.getElementsByTagName('li')[selectedid].setAttribute('class', 'selected locked fa-lock1');//axled lock icon
+                        document.querySelectorAll('li.naviItem')[selected].classList.add('locked', 'fa-lock1');//axled lock icon
                     }else{//if selected entry Action is object - so there is nothing to lock - execute it
                         self.show(0,{force: true});           
-                        self.sendAction(self.config.Action[selectedid]);
+                        self.sendAction(self.config.Action[selected]);
                     }
                 }else{//Menu locked so unlock it
                     locked = false;
-                    document.getElementsByTagName('li')[selectedid].setAttribute('class', 'selected');
+                    document.querySelectorAll('li.naviItem')[selected].classList.remove('locked', 'fa-lock1');
                 }
             }
         }
