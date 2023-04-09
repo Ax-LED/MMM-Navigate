@@ -10,10 +10,9 @@
   "author": "AxLED",
   "license": "MIT",
   "scripts": {
-    "install": "electron-rebuild"
+    "postinstall": "./postinstall"
   },
   "dependencies": {
-    "onoff": "latest",
-    "electron-rebuild": "latest"
+    "onoff": "latest"
   }
 }
