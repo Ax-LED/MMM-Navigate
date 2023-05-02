@@ -107,6 +107,8 @@ The following properties can be configured:
    <code>yourmmip:8080/MMM-Navigate/remote?notification=SHELLCOMMAND&action=sudo%20shutdown%20-h%20now</code> send command to shutdown your pi
 
    ## Version
+   1.6 Changelog:
+   - fix rebuild step process (thanks to sdetweil)
    1.5 Changelog:
    - minor bugfixes
    
